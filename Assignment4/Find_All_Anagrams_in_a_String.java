@@ -3,33 +3,33 @@ package ICP.Assignment4;
 import java.util.*;
 class Solution {
     public List<Integer> findAnagrams(String s, String p) {
-        ArrayList<Integer> list=new ArrayList<>();
-        int[] freq1=new int[26];
-        for(int i=0;i<p.length();i++) {
-            freq1[p.charAt(i)-'a']++;
+        List<Integer> result = new ArrayList<>();
+        int lenS = s.length();
+        int lenP = p.length();
+        if(lenS < lenP) return result;
+        int[] countP = new int[26];
+        for(char c : p.toCharArray()) {
+            countP[c - 'a']++;
         }
-        int i=0;
-        int j=0;
-        int freq2[]=new int[26];
-        while(j<s.length()) {
-            freq2[s.charAt(j)-'a']++;
-            if((j-i+1)>p.length()) {
-                freq2[s.charAt(i)-'a']--;
-                i++;
+
+        for(int i = 0; i <= lenS - lenP; i++) {
+            String sub = s.substring(i, i + lenP);
+            int[] countSub = new int[26];
+            for(char c : sub.toCharArray()) {
+                countSub[c - 'a']++;
             }
-            if (frequency(freq1, freq2)) {
-                list.add(i);
+
+            boolean match = true;
+            for(int j = 0; j < 26; j++) {
+                if(countP[j] != countSub[j]) {
+                    match = false;
+                    break;
+                }
             }
-            j++;
+
+            if(match) result.add(i);
         }
-        return list;
-    }
-    static boolean frequency(int[] freq1, int[] freq2) {
-        for(int i=0;i<26;i++) {
-            if(freq1[i]!=freq2[i]) {
-                return false;
-            }
-        }
-        return true;
+
+        return result;
     }
 }
